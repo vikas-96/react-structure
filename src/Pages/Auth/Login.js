@@ -11,7 +11,6 @@ import {
   Col
 } from "reactstrap";
 import { login } from "../../request/auth";
-import serialize from "form-serialize";
 import notify from "../../utils/notify";
 import getErrorMessage from "../../utils/getErrorMessage";
 import { withFormik } from "formik";
@@ -30,15 +29,10 @@ const loginSchema = yup.object().shape({
 });
 
 const submitHandler = async values => {
-  console.log(values);
-  // const form = e.target;
-  // const formdata = serialize(form, { hash: true });
   try {
     const user = await login(values);
-    // console.log(user.access_token);
     initAxios();
     localStorage.setItem("userDetail", JSON.stringify(user));
-    // this.props.history.replace("/users");
   } catch (error) {
     if (error.response.status === 401) {
       notify({
@@ -58,7 +52,8 @@ class Login extends Component {
       handleBlur,
       isSubmitting,
       setFieldValue,
-      handleChange
+      handleChange,
+      isValid
     } = this.props;
     return (
       <Container className="mt-5">
@@ -104,8 +99,14 @@ class Login extends Component {
                   </FormFeedback>
                 </FormGroup>
                 <FormGroup>
-                  <Button size="sm" type="submit" color="primary" block>
-                    Login
+                  <Button
+                    disabled={isSubmitting || !isValid}
+                    size="sm"
+                    type="submit"
+                    color="primary"
+                    block
+                  >
+                    {isSubmitting ? "Please Wait..." : "Login"}
                   </Button>
                 </FormGroup>
               </Form>
@@ -117,7 +118,6 @@ class Login extends Component {
   }
 }
 
-// export default Login;
 export default withFormik({
   mapPropsToValues: props => ({
     username: props.username,
