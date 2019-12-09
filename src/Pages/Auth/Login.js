@@ -28,11 +28,12 @@ const loginSchema = yup.object().shape({
     .required("password is a required field.")
 });
 
-const submitHandler = async values => {
+const submitHandler = async (values, { props }) => {
   try {
     const user = await login(values);
     initAxios();
-    localStorage.setItem("userDetail", JSON.stringify(user));
+    localStorage.setItem("userDetails", JSON.stringify(user));
+    props.history.replace("/dashboard");
   } catch (error) {
     if (error.response.status === 401) {
       notify({
@@ -51,7 +52,7 @@ class Login extends Component {
       touched,
       handleBlur,
       isSubmitting,
-      setFieldValue,
+      // setFieldValue,
       handleChange,
       isValid
     } = this.props;
