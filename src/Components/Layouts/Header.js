@@ -20,17 +20,17 @@ const Header = () => {
   return (
     <div>
       <Navbar color="light" light expand="md">
-        <NavbarBrand href="/">
+        <NavbarBrand to={"/"}>
           <img src="/images/logo.png" alt="demo-logo" width="90px" />
         </NavbarBrand>
         <NavbarToggler onClick={toggle} />
         <Collapse isOpen={isOpen} navbar>
           <Nav className="ml-auto" navbar>
             <NavItem>
-              <NavLink href="">Dashboard</NavLink>
+              <NavLink to="/dashboard">Dashboard</NavLink>
             </NavItem>
             <NavItem>
-              <NavLink href="">Users</NavLink>
+              <NavLink to="/user">Users</NavLink>
             </NavItem>
             <UncontrolledDropdown nav inNavbar>
               <DropdownToggle nav caret>

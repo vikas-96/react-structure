@@ -32,7 +32,7 @@ export const PrivateLayout = ({
             <Footer />
           </div>
         ) : (
-          <Redirect to="/login" />
+          <Redirect to="/" />
         )
       }
     />
