@@ -6,12 +6,13 @@ import {
   NavbarBrand,
   Nav,
   NavItem,
-  NavLink,
   UncontrolledDropdown,
   DropdownToggle,
   DropdownMenu,
   DropdownItem
 } from "reactstrap";
+import { NavLink } from "react-router-dom";
+import logout from "../../Pages/Auth/Logout";
 
 const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -43,6 +44,11 @@ const Header = () => {
                 <DropdownItem>Reset</DropdownItem>
               </DropdownMenu>
             </UncontrolledDropdown>
+            <NavItem>
+              <NavLink onClick={logout} to="/">
+                Logout
+              </NavLink>
+            </NavItem>
           </Nav>
         </Collapse>
       </Navbar>

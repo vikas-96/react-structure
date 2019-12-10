@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { dashboard } from "../../request/dashboard";
+import { Toast, ToastBody, ToastHeader, Row, Col } from "reactstrap";
+import _ from "lodash";
+import StatisticCard from "./StatisticCard";
 
 const Dashboard = () => {
   const [statics, setStatics] = useState();
@@ -12,12 +15,31 @@ const Dashboard = () => {
     fetchData();
   }, []);
 
-  return statics ? (
+  if (_.isEmpty(statics)) return <p>Loading...</p>;
+
+  return (
     <React.Fragment>
-      <h5>Dashboard {statics.users}</h5>
+      <Row className="mb-3">
+        <Col md={3}>
+          <StatisticCard
+            color="success"
+            iconClass="fa-phone fa-flip-horizontal"
+            message="Users"
+            messageLink="/user"
+            count={statics.users}
+          />
+        </Col>
+        <Col md={3}>
+          <StatisticCard
+            color="danger"
+            iconClass="fa-phone fa-flip-horizontal"
+            message="Test"
+            messageLink="/test"
+            count={statics.users}
+          />
+        </Col>
+      </Row>
     </React.Fragment>
-  ) : (
-    "Loading..."
   );
 };
 
