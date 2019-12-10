@@ -2,19 +2,23 @@ import React, { useState, useEffect } from "react";
 import { dashboard } from "../../request/dashboard";
 
 const Dashboard = () => {
-  const [statics, setStatics] = useState({});
+  const [statics, setStatics] = useState();
 
   async function fetchData() {
-    const res = await dashboard();
-    console.log(res);
-    // res.then(res => setStatics(res));
+    await dashboard().then(res => setStatics(res));
   }
 
   useEffect(() => {
     fetchData();
-  });
+  }, []);
 
-  return <h5>dashboard</h5>;
+  return statics ? (
+    <React.Fragment>
+      <h5>Dashboard {statics.users}</h5>
+    </React.Fragment>
+  ) : (
+    "Loading..."
+  );
 };
 
 export default Dashboard;
