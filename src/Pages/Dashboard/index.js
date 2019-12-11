@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { dashboard } from "../../request/dashboard";
-import { Toast, ToastBody, ToastHeader, Row, Col } from "reactstrap";
+import { Row, Col } from "reactstrap";
 import _ from "lodash";
 import StatisticCard from "./StatisticCard";
 
