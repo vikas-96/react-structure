@@ -25,7 +25,7 @@ export default function reduce(state = initialState, action = {}) {
         ...state,
         userData: {},
         isValidationError: true,
-        error: action.payload.error
+        error: action.payload
       };
     default:
       return state;

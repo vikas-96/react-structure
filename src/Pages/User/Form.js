@@ -82,7 +82,8 @@ const UserForm = props => {
     isSubmitting,
     setFieldValue,
     handleChange,
-    isValid
+    isValid,
+    validationErrors
   } = props;
 
   const [role, setRole] = useState({});
@@ -128,7 +129,12 @@ const UserForm = props => {
                   invalid={Boolean(touched.firstname && errors.firstname)}
                   valid={!!(touched.firstname && !errors.firstname)}
                 />
-                <FormFeedback>{errors.firstname}</FormFeedback>
+                {!_.isEmpty([errors.firstname, validationErrors.firstname]) &&
+                  touched.firstname && (
+                    <FormFeedback style={{ display: "block" }}>
+                      {errors.firstname || validationErrors.firstname}
+                    </FormFeedback>
+                  )}
               </FormGroup>
             </Col>
             <Col md={3}>
@@ -144,7 +150,12 @@ const UserForm = props => {
                   invalid={Boolean(touched.lastname && errors.lastname)}
                   valid={!!(touched.lastname && !errors.lastname)}
                 />
-                <FormFeedback>{errors.lastname}</FormFeedback>
+                {!_.isEmpty([errors.lastname, validationErrors.lastname]) &&
+                  touched.lastname && (
+                    <FormFeedback style={{ display: "block" }}>
+                      {errors.lastname || validationErrors.lastname}
+                    </FormFeedback>
+                  )}
               </FormGroup>
             </Col>
             <Col md={3}>
@@ -160,7 +171,12 @@ const UserForm = props => {
                   invalid={Boolean(touched.email && errors.email)}
                   valid={!!(touched.email && !errors.email)}
                 />
-                <FormFeedback>{errors.email}</FormFeedback>
+                {!_.isEmpty([errors.email, validationErrors.email]) &&
+                  touched.email && (
+                    <FormFeedback style={{ display: "block" }}>
+                      {errors.email || validationErrors.email}
+                    </FormFeedback>
+                  )}
               </FormGroup>
             </Col>
             <Col md={3}>
@@ -178,7 +194,15 @@ const UserForm = props => {
                   )}
                   valid={!!(touched.contact_number && !errors.contact_number)}
                 />
-                <FormFeedback>{errors.contact_number}</FormFeedback>
+                {!_.isEmpty([
+                  errors.contact_number,
+                  validationErrors.contact_number
+                ]) &&
+                  touched.contact_number && (
+                    <FormFeedback style={{ display: "block" }}>
+                      {errors.contact_number || validationErrors.contact_number}
+                    </FormFeedback>
+                  )}
               </FormGroup>
             </Col>
             <Col md={3}>
@@ -194,7 +218,12 @@ const UserForm = props => {
                   invalid={Boolean(touched.password && errors.password)}
                   valid={!!(touched.password && !errors.password)}
                 />
-                <FormFeedback>{errors.password}</FormFeedback>
+                {!_.isEmpty([errors.password, validationErrors.password]) &&
+                  touched.password && (
+                    <FormFeedback style={{ display: "block" }}>
+                      {errors.password || validationErrors.password}
+                    </FormFeedback>
+                  )}
               </FormGroup>
             </Col>
             <Col md={3}>
@@ -214,7 +243,16 @@ const UserForm = props => {
                     !!(touched.confirm_password && !errors.confirm_password)
                   }
                 />
-                <FormFeedback>{errors.confirm_password}</FormFeedback>
+                {!_.isEmpty([
+                  errors.confirm_password,
+                  validationErrors.confirm_password
+                ]) &&
+                  touched.confirm_password && (
+                    <FormFeedback style={{ display: "block" }}>
+                      {errors.confirm_password ||
+                        validationErrors.confirm_password}
+                    </FormFeedback>
+                  )}
               </FormGroup>
             </Col>
             <Col md={3}>
@@ -226,7 +264,12 @@ const UserForm = props => {
                   onBlur={handleBlur}
                   onChange={option => setFieldValue("is_active", option.value)}
                 />
-                <FormFeedback>{errors.is_active}</FormFeedback>
+                {!_.isEmpty([errors.is_active, validationErrors.is_active]) &&
+                  touched.is_active && (
+                    <FormFeedback style={{ display: "block" }}>
+                      {errors.is_active || validationErrors.is_active}
+                    </FormFeedback>
+                  )}
               </FormGroup>
             </Col>
             <Col md={3}>
@@ -238,7 +281,12 @@ const UserForm = props => {
                   onBlur={handleBlur}
                   onChange={option => setFieldValue("role", option.value)}
                 />
-                <FormFeedback>{errors.role}</FormFeedback>
+                {!_.isEmpty([errors.role, validationErrors.role]) &&
+                  touched.role && (
+                    <FormFeedback style={{ display: "block" }}>
+                      {errors.role || validationErrors.role}
+                    </FormFeedback>
+                  )}
               </FormGroup>
             </Col>
           </Row>

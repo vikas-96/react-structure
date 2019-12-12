@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import UserForm from "./Form";
 import { createUserData } from "../../Store/User/Action";
 import { connect } from "react-redux";
+import getValidationErrors from "../../utils/getValidationErrors";
 
 class Add extends Component {
   handleSubmit = async data => {
@@ -12,7 +13,13 @@ class Add extends Component {
   };
 
   render() {
-    return <UserForm submitHandler={this.handleSubmit} />;
+    return (
+      <UserForm
+        validationErrors={getValidationErrors(this.props)}
+        isValidationError={this.props.isValidationError}
+        submitHandler={this.handleSubmit}
+      />
+    );
   }
 }
 

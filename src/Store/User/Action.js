@@ -9,7 +9,10 @@ export function createUserData(data) {
         dispatch({ type: types.CREATE_USER_SUCCESS, payload: json });
       })
       .catch(error => {
-        dispatch({ type: types.CREATE_USER_FAILURE, payload: error });
+        dispatch({
+          type: types.CREATE_USER_FAILURE,
+          payload: error
+        });
       });
   };
 }
