@@ -16,7 +16,7 @@ export default function reduce(state = initialState, action = {}) {
     case types.CREATE_USER_SUCCESS:
       return {
         ...state,
-        userData: action.payload.user,
+        isUserCreated: true,
         isValidationError: false,
         error: null
       };

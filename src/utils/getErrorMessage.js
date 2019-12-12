@@ -2,8 +2,6 @@ import get from "lodash/get";
 
 export default function(error) {
   let message = error.message;
-  console.log(error);
-  console.log(error.message);
   if (error.response && error.response.status === 422) {
     const errors = get(error, "response.data.errors", []);
     const errorKey = Object.keys(errors)[0];

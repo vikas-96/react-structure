@@ -3,6 +3,7 @@ import UserForm from "./Form";
 import { createUserData } from "../../Store/User/Action";
 import { connect } from "react-redux";
 import getValidationErrors from "../../utils/getValidationErrors";
+import notify from "../../utils/showNotifyWithRedirect";
 
 class Add extends Component {
   handleSubmit = async data => {
@@ -13,6 +14,14 @@ class Add extends Component {
   };
 
   render() {
+    if (this.props.isUserCreated) {
+      notify({
+        time: 1000,
+        message: "User created successfully!",
+        path: "/user",
+        ...this.props
+      });
+    }
     return (
       <UserForm
         validationErrors={getValidationErrors(this.props)}
@@ -25,7 +34,7 @@ class Add extends Component {
 
 function mapStateToProps(state) {
   return {
-    userData: state.User.userData,
+    isUserCreated: state.User.isUserCreated,
     error: state.User.error,
     isValidationError: state.User.isValidationError
   };

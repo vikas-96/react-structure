@@ -1,5 +1,6 @@
 import notify from "./notify";
 import getErrorMessage from "./getErrorMessage";
+import _ from "lodash";
 
 export default function(props) {
   let errorData = {};
@@ -13,6 +14,12 @@ export default function(props) {
     Object.keys(fields).forEach(function(key) {
       errorData[key] = fields[key][0];
     });
+    !_.isEmpty(errorData) &&
+      notify({
+        type: "error",
+        text: "Please Check the Error Fields."
+      });
+
     return errorData;
   }
   if (props.isValidationError && props.error) {

@@ -31,8 +31,8 @@ const loginSchema = yup.object().shape({
 const submitHandler = async (values, { props }) => {
   try {
     const user = await login(values);
-    initAxios();
     localStorage.setItem("userDetails", JSON.stringify(user));
+    initAxios();
     props.history.replace("/dashboard");
   } catch (error) {
     if (error.response.status === 401) {
@@ -78,9 +78,11 @@ class Login extends Component {
                       onBlur={handleBlur}
                     />
                   </div>
-                  <FormFeedback style={{ display: "block" }}>
-                    {errors.username}
-                  </FormFeedback>
+                  {touched.username && (
+                    <FormFeedback style={{ display: "block" }}>
+                      {errors.username}
+                    </FormFeedback>
+                  )}
                 </FormGroup>
                 <FormGroup>
                   <div className="form-label-group">
@@ -95,9 +97,11 @@ class Login extends Component {
                       onBlur={handleBlur}
                     />
                   </div>
-                  <FormFeedback style={{ display: "block" }}>
-                    {errors.password}
-                  </FormFeedback>
+                  {touched.password && (
+                    <FormFeedback style={{ display: "block" }}>
+                      {errors.password}
+                    </FormFeedback>
+                  )}
                 </FormGroup>
                 <FormGroup>
                   <Button

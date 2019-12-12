@@ -3,8 +3,8 @@ import { Navbar, Nav, Label } from "reactstrap";
 
 const Footer = () => {
   return (
-    <div className="footer">
-      <Navbar color="light" light expand="md">
+    <div>
+      <Navbar color="light" light expand="md" className="footer">
         <Nav>
           <Label>© Keibank</Label>
         </Nav>
