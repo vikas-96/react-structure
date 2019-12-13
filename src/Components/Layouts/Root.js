@@ -1,10 +1,12 @@
-import React from "react";
+import React, { lazy } from "react";
 import { Switch } from "react-router-dom";
 import { PublicLayout, PrivateLayout } from "./Layout";
 import Login from "../../Pages/Auth/Login";
 import Dashboard from "../../Pages/Dashboard";
 import User from "../../Pages/User";
-import AddUser from "../../Pages/User/Add";
+// import AddUser from "../../Pages/User/Add";
+import EditUser from "../../Pages/User/Edit";
+const AddUser = lazy(() => import("../../Pages/User/Add"));
 
 const Root = () => {
   return (
@@ -29,12 +31,12 @@ const Root = () => {
           component={AddUser}
           authenticated={true}
         />
-        {/* <PrivateLayout
+        <PrivateLayout
           path="/user/edit/:id"
           exact
-          component={User}
+          component={EditUser}
           authenticated={true}
-        /> */}
+        />
       </Switch>
     </React.Fragment>
   );
