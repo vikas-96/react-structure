@@ -22,6 +22,7 @@ export default function(props) {
 
     return errorData;
   }
+
   if (props.isValidationError && props.error) {
     notify({
       type: "error",

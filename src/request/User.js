@@ -17,3 +17,14 @@ export function createUser(data) {
     })
     .then(response => response.data);
 }
+
+//get user
+export async function getUser(id) {
+  return await axios
+    .get(process.env.REACT_APP_API_URL + "/api/users/" + id, {
+      header: {
+        "Content-Type": "application/json"
+      }
+    })
+    .then(response => response.data);
+}

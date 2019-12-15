@@ -82,7 +82,8 @@ const UserForm = props => {
     setFieldValue,
     handleChange,
     isValid,
-    validationErrors
+    validationErrors,
+    values
   } = props;
 
   const [role, setRole] = useState({});
@@ -110,6 +111,7 @@ const UserForm = props => {
     return roleArry;
   };
 
+  console.log(...props.userData);
   return (
     <React.Fragment>
       <Form onSubmit={handleSubmit}>
@@ -123,6 +125,7 @@ const UserForm = props => {
                   name="firstname"
                   placeholder="First Name"
                   autoComplete="off"
+                  defaultValue={values.firstname}
                   onBlur={handleBlur}
                   onChange={handleChange}
                   invalid={Boolean(touched.firstname && errors.firstname)}
@@ -309,15 +312,7 @@ const UserForm = props => {
 };
 
 export default withFormik({
-  mapPropsToValues: props => ({
-    firstname: props.firstname,
-    lastname: props.lastname,
-    email: props.email,
-    contact_number: props.contact_number,
-    password: props.password,
-    is_active: props.is_active,
-    role: props.role
-  }),
+  mapPropsToValues: props => ({ ...props.userData }),
   validationSchema: loginSchema,
   handleSubmit: onSubmit
 })(UserForm);

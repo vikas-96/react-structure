@@ -8,6 +8,7 @@ const initialState = {
 
 export default function reduce(state = initialState, action = {}) {
   switch (action.type) {
+    // create
     case types.CREATE_USER_BEGIN:
       return {
         ...state,
@@ -23,8 +24,26 @@ export default function reduce(state = initialState, action = {}) {
     case types.CREATE_USER_FAILURE:
       return {
         ...state,
-        userData: {},
         isValidationError: true,
+        error: action.payload
+      };
+
+    // get
+    case types.GET_USER_BEGIN:
+      return {
+        ...state,
+        error: null
+      };
+    case types.GET_USER_SUCCESS:
+      return {
+        ...state,
+        userData: action.payload,
+        error: null
+      };
+    case types.GET_USER_FAILURE:
+      return {
+        ...state,
+        userData: {},
         error: action.payload
       };
     default:

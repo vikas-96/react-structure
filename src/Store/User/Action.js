@@ -1,5 +1,5 @@
 import * as types from "./ActionType";
-import { createUser } from "../../request/User";
+import { createUser, getUser } from "../../request/User";
 
 export function createUserData(data) {
   return async dispatch => {
@@ -13,6 +13,19 @@ export function createUserData(data) {
           type: types.CREATE_USER_FAILURE,
           payload: error
         });
+      });
+  };
+}
+
+export function getUserData(id) {
+  return async dispatch => {
+    dispatch({ type: types.GET_USER_BEGIN });
+    return await getUser(id)
+      .then(json => {
+        dispatch({ type: types.GET_USER_SUCCESS, payload: json });
+      })
+      .catch(error => {
+        dispatch({ type: types.GET_USER_FAILURE, payload: error });
       });
   };
 }
