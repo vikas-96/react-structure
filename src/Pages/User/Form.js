@@ -74,6 +74,7 @@ const onSubmit = async (
 
 const UserForm = props => {
   const {
+    values,
     handleSubmit,
     errors,
     touched,
@@ -82,8 +83,7 @@ const UserForm = props => {
     setFieldValue,
     handleChange,
     isValid,
-    validationErrors,
-    values
+    validationErrors
   } = props;
 
   const [role, setRole] = useState({});
@@ -111,7 +111,6 @@ const UserForm = props => {
     return roleArry;
   };
 
-  console.log(...props.userData);
   return (
     <React.Fragment>
       <Form onSubmit={handleSubmit}>
@@ -147,6 +146,7 @@ const UserForm = props => {
                   name="lastname"
                   placeholder="Last Name"
                   autoComplete="off"
+                  defaultValue={values.lastname}
                   onBlur={handleBlur}
                   onChange={handleChange}
                   invalid={Boolean(touched.lastname && errors.lastname)}
@@ -168,6 +168,7 @@ const UserForm = props => {
                   name="email"
                   placeholder="Email"
                   autoComplete="off"
+                  defaultValue={values.email}
                   onBlur={handleBlur}
                   onChange={handleChange}
                   invalid={Boolean(touched.email && errors.email)}
@@ -189,6 +190,7 @@ const UserForm = props => {
                   name="contact_number"
                   placeholder="Contact Number"
                   autoComplete="off"
+                  defaultValue={values.contact_number}
                   onBlur={handleBlur}
                   onChange={handleChange}
                   invalid={Boolean(
@@ -207,56 +209,60 @@ const UserForm = props => {
                   )}
               </FormGroup>
             </Col>
-            <Col md={3}>
-              <FormGroup>
-                <Label for="password">Password</Label>
-                <Input
-                  type="password"
-                  name="password"
-                  placeholder="********"
-                  autoComplete="off"
-                  onBlur={handleBlur}
-                  onChange={handleChange}
-                  invalid={Boolean(touched.password && errors.password)}
-                  valid={!!(touched.password && !errors.password)}
-                />
-                {!_.isEmpty([errors.password, validationErrors.password]) &&
-                  touched.password && (
-                    <FormFeedback style={{ display: "block" }}>
-                      {errors.password || validationErrors.password}
-                    </FormFeedback>
-                  )}
-              </FormGroup>
-            </Col>
-            <Col md={3}>
-              <FormGroup>
-                <Label for="confirm_password">Confirm Password</Label>
-                <Input
-                  type="password"
-                  name="confirm_password"
-                  placeholder="********"
-                  autoComplete="off"
-                  onBlur={handleBlur}
-                  onChange={handleChange}
-                  invalid={Boolean(
-                    touched.confirm_password && errors.confirm_password
-                  )}
-                  valid={
-                    !!(touched.confirm_password && !errors.confirm_password)
-                  }
-                />
-                {!_.isEmpty([
-                  errors.confirm_password,
-                  validationErrors.confirm_password
-                ]) &&
-                  touched.confirm_password && (
-                    <FormFeedback style={{ display: "block" }}>
-                      {errors.confirm_password ||
-                        validationErrors.confirm_password}
-                    </FormFeedback>
-                  )}
-              </FormGroup>
-            </Col>
+            {props.isCreate === true && (
+              <div>
+                <Col md={3}>
+                  <FormGroup>
+                    <Label for="password">Password</Label>
+                    <Input
+                      type="password"
+                      name="password"
+                      placeholder="********"
+                      autoComplete="off"
+                      onBlur={handleBlur}
+                      onChange={handleChange}
+                      invalid={Boolean(touched.password && errors.password)}
+                      valid={!!(touched.password && !errors.password)}
+                    />
+                    {!_.isEmpty([errors.password, validationErrors.password]) &&
+                      touched.password && (
+                        <FormFeedback style={{ display: "block" }}>
+                          {errors.password || validationErrors.password}
+                        </FormFeedback>
+                      )}
+                  </FormGroup>
+                </Col>
+                <Col md={3}>
+                  <FormGroup>
+                    <Label for="confirm_password">Confirm Password</Label>
+                    <Input
+                      type="password"
+                      name="confirm_password"
+                      placeholder="********"
+                      autoComplete="off"
+                      onBlur={handleBlur}
+                      onChange={handleChange}
+                      invalid={Boolean(
+                        touched.confirm_password && errors.confirm_password
+                      )}
+                      valid={
+                        !!(touched.confirm_password && !errors.confirm_password)
+                      }
+                    />
+                    {!_.isEmpty([
+                      errors.confirm_password,
+                      validationErrors.confirm_password
+                    ]) &&
+                      touched.confirm_password && (
+                        <FormFeedback style={{ display: "block" }}>
+                          {errors.confirm_password ||
+                            validationErrors.confirm_password}
+                        </FormFeedback>
+                      )}
+                  </FormGroup>
+                </Col>
+              </div>
+            )}
             <Col md={3}>
               <FormGroup>
                 <Label for="is_active">Status</Label>
@@ -265,6 +271,9 @@ const UserForm = props => {
                   options={ActiveOptions}
                   onBlur={handleBlur}
                   onChange={option => setFieldValue("is_active", option.value)}
+                  value={ActiveOptions.find(
+                    option => option.value === values.is_active
+                  )}
                 />
                 {!_.isEmpty([errors.is_active, validationErrors.is_active]) &&
                   touched.is_active && (
@@ -282,6 +291,9 @@ const UserForm = props => {
                   options={RoleOptions(role)}
                   onBlur={handleBlur}
                   onChange={option => setFieldValue("role", option.value)}
+                  value={RoleOptions(role).find(
+                    option => option.value === values.role
+                  )}
                 />
                 {!_.isEmpty([errors.role, validationErrors.role]) &&
                   touched.role && (
@@ -312,7 +324,9 @@ const UserForm = props => {
 };
 
 export default withFormik({
-  mapPropsToValues: props => ({ ...props.userData }),
+  mapPropsToValues: props => ({
+    ...props.userData
+  }),
   validationSchema: loginSchema,
   handleSubmit: onSubmit
 })(UserForm);

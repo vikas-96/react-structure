@@ -28,3 +28,14 @@ export async function getUser(id) {
     })
     .then(response => response.data);
 }
+
+//update user
+export async function updateUser(id, data) {
+  return await axios
+    .put(process.env.REACT_APP_API_URL + "/api/users/" + id, data, {
+      header: {
+        "Content-Type": "application/json"
+      }
+    })
+    .then(response => response.data);
+}

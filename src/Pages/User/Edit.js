@@ -5,12 +5,20 @@ import { connect } from "react-redux";
 import * as userAction from "../../Store/User/Action";
 import _ from "lodash";
 import notify from "../../utils/showNotifyWithRedirect";
+import updateUserData from "../../Store/User/Action";
 
 class EditUser extends Component {
   componentDidMount() {
     const { id } = this.props.match.params;
     this.props.dispatch(userAction.getUserData(id));
   }
+
+  handleSubmit = async data => {
+    try {
+      await this.props.dispatch(updateUserData(data));
+    } catch (error) {}
+    return this.props;
+  };
 
   render() {
     if (!_.isEmpty(this.props.error)) {
@@ -22,12 +30,14 @@ class EditUser extends Component {
           ...this.props
         });
       }
-      getValidationErrors(this.props);
     }
+    if (_.isEmpty(this.props.userData)) return <p>Loading...</p>;
     return (
       <UserForm
+        submitHandler={this.handleSubmit}
+        isCreate={false}
         userData={this.props.userData}
-        validationErrors="{'nmn':'hhhbhb'}"
+        validationErrors={getValidationErrors(this.props)}
       />
     );
   }

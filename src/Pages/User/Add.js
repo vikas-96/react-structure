@@ -24,6 +24,7 @@ class Add extends Component {
     }
     return (
       <UserForm
+        isCreate={true}
         validationErrors={getValidationErrors(this.props)}
         isValidationError={this.props.isValidationError}
         submitHandler={this.handleSubmit}
