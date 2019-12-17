@@ -6,6 +6,10 @@ import Dashboard from "../../Pages/Dashboard";
 import User from "../../Pages/User";
 import AddUser from "../../Pages/User/Add";
 import EditUser from "../../Pages/User/Edit";
+
+import Borrower from "../../Pages/Borrower";
+import AddBorrower from "../../Pages/Borrower/Add";
+// import EditUser from "../../Pages/User/Edit";
 // const AddUser = lazy(() => import("../../Pages/User/Add"));
 
 const Root = () => {
@@ -34,6 +38,24 @@ const Root = () => {
         />
         <PrivateLayout
           path="/user/edit/:id"
+          exact
+          component={EditUser}
+          authenticated={true}
+        />
+        <PrivateLayout
+          path="/borrower"
+          exact
+          component={Borrower}
+          authenticated={true}
+        />
+        <PrivateLayout
+          path="/borrower/add"
+          exact
+          component={AddBorrower}
+          authenticated={true}
+        />
+        <PrivateLayout
+          path="/borrower/edit/:id"
           exact
           component={EditUser}
           authenticated={true}

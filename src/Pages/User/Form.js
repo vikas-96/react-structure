@@ -15,46 +15,56 @@ import _ from "lodash";
 import { withFormik } from "formik";
 import * as yup from "yup";
 
-const loginSchema = yup.object().shape({
-  firstname: yup
-    .string()
-    .trim()
-    .required("Firstname is a required field."),
-  lastname: yup
-    .string()
-    .trim()
-    .required("Lastname is a required field."),
-  email: yup
-    .string()
-    .trim()
-    .email("Email must be a valid email.")
-    .required("Email is a required field."),
-  contact_number: yup
-    .string()
-    .trim()
-    .required("Contact is a required field.")
-    .matches(/^[0-9]{10}$/, {
-      message: "Contact must be 10 digits",
-      excludeEmptyString: true
-    }),
-  password: yup
-    .string()
-    .trim()
-    .required("Password is a required field."),
-  confirm_password: yup
-    .string()
-    .trim()
-    .required("Confirm Password is a required field.")
-    .oneOf([yup.ref("password"), null], "Passwords must match."),
-  is_active: yup
-    .string()
-    .trim()
-    .required("Status is a required field."),
-  role: yup
-    .string()
-    .trim()
-    .required("Role is a required field.")
-});
+const userSchema = props => {
+  let password_schema,
+    confirm_password_schema = "";
+  if (props.isCreate) {
+    console.log("password");
+    password_schema = yup
+      .string()
+      .trim()
+      .required("Password is a required field.");
+    confirm_password_schema = yup
+      .string()
+      .trim()
+      .oneOf([yup.ref("password"), null], "Passwords must match.")
+      .required("Password confirm is required.");
+  }
+
+  return yup.object().shape({
+    firstname: yup
+      .string()
+      .trim()
+      .required("Firstname is a required field."),
+    lastname: yup
+      .string()
+      .trim()
+      .required("Lastname is a required field."),
+    email: yup
+      .string()
+      .trim()
+      .email("Email must be a valid email.")
+      .required("Email is a required field."),
+    contact_number: yup
+      .string()
+      .trim()
+      .required("Contact is a required field.")
+      .matches(/^[0-9]{10}$/, {
+        message: "Contact must be 10 digits",
+        excludeEmptyString: true
+      }),
+    password: password_schema,
+    confirm_password: confirm_password_schema,
+    is_active: yup
+      .string()
+      .trim()
+      .required("Status is a required field."),
+    role: yup
+      .string()
+      .trim()
+      .required("Role is a required field.")
+  });
+};
 
 const onSubmit = async (
   values,
@@ -62,6 +72,7 @@ const onSubmit = async (
 ) => {
   try {
     setSubmitting(true);
+    console.log(values);
     const res = await props.submitHandler(values);
     if (res.isValidationError) {
       setSubmitting(false);
@@ -127,15 +138,15 @@ const UserForm = props => {
                   defaultValue={values.firstname}
                   onBlur={handleBlur}
                   onChange={handleChange}
-                  invalid={Boolean(touched.firstname && errors.firstname)}
+                  invalid={
+                    Boolean(touched.firstname && errors.firstname) ||
+                    validationErrors.firstname
+                  }
                   valid={!!(touched.firstname && !errors.firstname)}
                 />
-                {!_.isEmpty([errors.firstname, validationErrors.firstname]) &&
-                  touched.firstname && (
-                    <FormFeedback style={{ display: "block" }}>
-                      {errors.firstname || validationErrors.firstname}
-                    </FormFeedback>
-                  )}
+                <FormFeedback>
+                  {errors.firstname || validationErrors.firstname}
+                </FormFeedback>
               </FormGroup>
             </Col>
             <Col md={3}>
@@ -149,15 +160,15 @@ const UserForm = props => {
                   defaultValue={values.lastname}
                   onBlur={handleBlur}
                   onChange={handleChange}
-                  invalid={Boolean(touched.lastname && errors.lastname)}
+                  invalid={
+                    Boolean(touched.lastname && errors.lastname) ||
+                    validationErrors.lastname
+                  }
                   valid={!!(touched.lastname && !errors.lastname)}
                 />
-                {!_.isEmpty([errors.lastname, validationErrors.lastname]) &&
-                  touched.lastname && (
-                    <FormFeedback style={{ display: "block" }}>
-                      {errors.lastname || validationErrors.lastname}
-                    </FormFeedback>
-                  )}
+                <FormFeedback>
+                  {errors.lastname || validationErrors.lastname}
+                </FormFeedback>
               </FormGroup>
             </Col>
             <Col md={3}>
@@ -171,15 +182,15 @@ const UserForm = props => {
                   defaultValue={values.email}
                   onBlur={handleBlur}
                   onChange={handleChange}
-                  invalid={Boolean(touched.email && errors.email)}
+                  invalid={
+                    Boolean(touched.email && errors.email) ||
+                    validationErrors.email
+                  }
                   valid={!!(touched.email && !errors.email)}
                 />
-                {!_.isEmpty([errors.email, validationErrors.email]) &&
-                  touched.email && (
-                    <FormFeedback style={{ display: "block" }}>
-                      {errors.email || validationErrors.email}
-                    </FormFeedback>
-                  )}
+                <FormFeedback>
+                  {errors.email || validationErrors.email}
+                </FormFeedback>
               </FormGroup>
             </Col>
             <Col md={3}>
@@ -193,23 +204,18 @@ const UserForm = props => {
                   defaultValue={values.contact_number}
                   onBlur={handleBlur}
                   onChange={handleChange}
-                  invalid={Boolean(
-                    touched.contact_number && errors.contact_number
-                  )}
+                  invalid={
+                    Boolean(touched.contact_number && errors.contact_number) ||
+                    validationErrors.contact_number
+                  }
                   valid={!!(touched.contact_number && !errors.contact_number)}
                 />
-                {!_.isEmpty([
-                  errors.contact_number,
-                  validationErrors.contact_number
-                ]) &&
-                  touched.contact_number && (
-                    <FormFeedback style={{ display: "block" }}>
-                      {errors.contact_number || validationErrors.contact_number}
-                    </FormFeedback>
-                  )}
+                <FormFeedback>
+                  {errors.contact_number || validationErrors.contact_number}
+                </FormFeedback>
               </FormGroup>
             </Col>
-            {props.isCreate === true && (
+            {props.isCreate && (
               <div>
                 <Col md={3}>
                   <FormGroup>
@@ -221,15 +227,15 @@ const UserForm = props => {
                       autoComplete="off"
                       onBlur={handleBlur}
                       onChange={handleChange}
-                      invalid={Boolean(touched.password && errors.password)}
+                      invalid={
+                        Boolean(touched.password && errors.password) ||
+                        validationErrors.password
+                      }
                       valid={!!(touched.password && !errors.password)}
                     />
-                    {!_.isEmpty([errors.password, validationErrors.password]) &&
-                      touched.password && (
-                        <FormFeedback style={{ display: "block" }}>
-                          {errors.password || validationErrors.password}
-                        </FormFeedback>
-                      )}
+                    <FormFeedback>
+                      {errors.password || validationErrors.password}
+                    </FormFeedback>
                   </FormGroup>
                 </Col>
                 <Col md={3}>
@@ -242,23 +248,16 @@ const UserForm = props => {
                       autoComplete="off"
                       onBlur={handleBlur}
                       onChange={handleChange}
-                      invalid={Boolean(
-                        touched.confirm_password && errors.confirm_password
-                      )}
+                      invalid={
+                        Boolean(
+                          touched.confirm_password && errors.confirm_password
+                        ) || validationErrors.confirm_password
+                      }
                       valid={
                         !!(touched.confirm_password && !errors.confirm_password)
                       }
                     />
-                    {!_.isEmpty([
-                      errors.confirm_password,
-                      validationErrors.confirm_password
-                    ]) &&
-                      touched.confirm_password && (
-                        <FormFeedback style={{ display: "block" }}>
-                          {errors.confirm_password ||
-                            validationErrors.confirm_password}
-                        </FormFeedback>
-                      )}
+                    <FormFeedback>{errors.confirm_password}</FormFeedback>
                   </FormGroup>
                 </Col>
               </div>
@@ -306,13 +305,7 @@ const UserForm = props => {
           </Row>
           <FormGroup>
             <Col md={2} className="float-right">
-              <Button
-                disabled={isSubmitting || !isValid}
-                size="sm"
-                type="submit"
-                color="primary"
-                block
-              >
+              <Button size="sm" type="submit" color="primary" block>
                 {isSubmitting ? "Please Wait..." : "Submit"}
               </Button>
             </Col>
@@ -327,6 +320,6 @@ export default withFormik({
   mapPropsToValues: props => ({
     ...props.userData
   }),
-  validationSchema: loginSchema,
+  validationSchema: userSchema,
   handleSubmit: onSubmit
 })(UserForm);

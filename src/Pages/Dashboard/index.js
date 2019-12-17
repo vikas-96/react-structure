@@ -33,9 +33,9 @@ const Dashboard = () => {
           <StatisticCard
             color="danger"
             iconClass="fa-phone fa-flip-horizontal"
-            message="Test"
-            messageLink="/test"
-            count={statics.users}
+            message="Borrower"
+            messageLink="/borrower"
+            count={statics.borrowers}
           />
         </Col>
       </Row>
