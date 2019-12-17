@@ -13,23 +13,55 @@ import Select from "react-select";
 import { getRole } from "../../request/User";
 import _ from "lodash";
 
+const ActiveOptions = [
+  { value: true, label: "Active" },
+  { value: false, label: "Inactive" }
+];
+
+const RoleOptions = roles => {
+  const roleArry = [];
+  roles.data.map(role =>
+    roleArry.push({ label: role.display_name, value: role.name })
+  );
+  return roleArry;
+};
+
 class UserForm extends React.Component {
   state = {
-    roles: {}
+    roles: {},
+    userDetails: {
+      firstname: "",
+      lastname: "",
+      email: "",
+      contact_number: "",
+      password: "",
+      confirm_password: "",
+      is_active: "",
+      role: ""
+    }
   };
 
-  componentsDidMount() {
+  componentDidMount() {
     this.fetchRole();
   }
 
   fetchRole = async () => {
-    console.log("asd");
     await getRole().then(res => this.setState({ roles: res }));
     console.log(this.state);
   };
 
   render() {
     const { roles } = this.state;
+    const {
+      firstname,
+      lastname,
+      email,
+      contact_number,
+      password,
+      confirm_password,
+      is_active,
+      role
+    } = this.state.userDetails;
     // const onSubmit = async (values, { props, setSubmitting }) => {
     //   try {
     //     setSubmitting(true);
@@ -43,19 +75,6 @@ class UserForm extends React.Component {
     //     setSubmitting(false);
     //   }
     // };
-
-    const ActiveOptions = [
-      { value: true, label: "Active" },
-      { value: false, label: "Inactive" }
-    ];
-
-    const RoleOptions = roles => {
-      const roleArry = [];
-      roles.data.map(role =>
-        roleArry.push({ label: role.display_name, value: role.name })
-      );
-      return roleArry;
-    };
 
     if (_.isEmpty(roles)) return <p>Loading...</p>;
     return (
@@ -71,6 +90,7 @@ class UserForm extends React.Component {
                     name="firstname"
                     placeholder="First Name"
                     autoComplete="off"
+                    value={firstname}
                   />
                   <FormFeedback></FormFeedback>
                 </FormGroup>
@@ -83,6 +103,7 @@ class UserForm extends React.Component {
                     name="lastname"
                     placeholder="Last Name"
                     autoComplete="off"
+                    value={lastname}
                   />
                   <FormFeedback></FormFeedback>
                 </FormGroup>
@@ -95,6 +116,7 @@ class UserForm extends React.Component {
                     name="email"
                     placeholder="Email"
                     autoComplete="off"
+                    value={email}
                   />
                   <FormFeedback></FormFeedback>
                 </FormGroup>
@@ -107,6 +129,7 @@ class UserForm extends React.Component {
                     name="contact_number"
                     placeholder="Contact Number"
                     autoComplete="off"
+                    value={contact_number}
                   />
                   <FormFeedback></FormFeedback>
                 </FormGroup>
@@ -119,6 +142,7 @@ class UserForm extends React.Component {
                     name="password"
                     placeholder="********"
                     autoComplete="off"
+                    value={password}
                   />
                   <FormFeedback></FormFeedback>
                 </FormGroup>
@@ -131,6 +155,7 @@ class UserForm extends React.Component {
                     name="confirm_password"
                     placeholder="********"
                     autoComplete="off"
+                    value={confirm_password}
                   />
                   <FormFeedback></FormFeedback>
                 </FormGroup>
@@ -141,9 +166,9 @@ class UserForm extends React.Component {
                   <Select
                     name="is_active"
                     options={ActiveOptions}
-                    //   value={ActiveOptions.find(
-                    //     option => option.value === values.is_active
-                    //   )}
+                    value={ActiveOptions.find(
+                      option => option.value === is_active
+                    )}
                   />
                 </FormGroup>
               </Col>
@@ -153,9 +178,9 @@ class UserForm extends React.Component {
                   <Select
                     name="role"
                     options={RoleOptions(roles)}
-                    //   value={RoleOptions(role).find(
-                    //     option => option.value === values.role
-                    //   )}
+                    value={RoleOptions(roles).find(
+                      option => option.value === role
+                    )}
                   />
                 </FormGroup>
               </Col>

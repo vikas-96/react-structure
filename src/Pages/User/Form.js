@@ -93,7 +93,7 @@ const UserForm = props => {
     isSubmitting,
     setFieldValue,
     handleChange,
-    isValid,
+    // isValid,
     validationErrors
   } = props;
 
