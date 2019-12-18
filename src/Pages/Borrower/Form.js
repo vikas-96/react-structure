@@ -28,6 +28,7 @@ const RoleOptions = roles => {
 
 class UserForm extends React.Component {
   state = {
+    isSubmitting: false,
     roles: {},
     userDetails: {
       firstname: "",
@@ -47,11 +48,45 @@ class UserForm extends React.Component {
 
   fetchRole = async () => {
     await getRole().then(res => this.setState({ roles: res }));
-    console.log(this.state);
+  };
+
+  handleChange = e => {
+    this.setState({
+      userDetails: {
+        ...this.state.userDetails,
+        [e.target.name]: e.target.value
+      }
+    });
+  };
+
+  handleSelect = (e, componentName) => {
+    this.setState({
+      userDetails: {
+        ...this.state.userDetails,
+        [componentName.name]: e.value
+      }
+    });
+  };
+
+  isSubmitting = bool => {
+    this.setState({ isSubmitting: bool });
+  };
+
+  handleSubmit = async e => {
+    e.preventDefault();
+    // console.log(this.props);
+    try {
+      this.isSubmitting(true);
+      await this.props.submitHandler(this.state.userDetails);
+      this.isSubmitting(false);
+    } catch (error) {
+      this.isSubmitting(false);
+      return false;
+    }
   };
 
   render() {
-    const { roles } = this.state;
+    const { roles, isSubmitting } = this.state;
     const {
       firstname,
       lastname,
@@ -79,7 +114,7 @@ class UserForm extends React.Component {
     if (_.isEmpty(roles)) return <p>Loading...</p>;
     return (
       <React.Fragment>
-        <Form>
+        <Form onSubmit={this.handleSubmit}>
           <div className="container-fluid">
             <Row>
               <Col md={3}>
@@ -91,6 +126,7 @@ class UserForm extends React.Component {
                     placeholder="First Name"
                     autoComplete="off"
                     value={firstname}
+                    onChange={this.handleChange}
                   />
                   <FormFeedback></FormFeedback>
                 </FormGroup>
@@ -104,6 +140,7 @@ class UserForm extends React.Component {
                     placeholder="Last Name"
                     autoComplete="off"
                     value={lastname}
+                    onChange={this.handleChange}
                   />
                   <FormFeedback></FormFeedback>
                 </FormGroup>
@@ -117,6 +154,7 @@ class UserForm extends React.Component {
                     placeholder="Email"
                     autoComplete="off"
                     value={email}
+                    onChange={this.handleChange}
                   />
                   <FormFeedback></FormFeedback>
                 </FormGroup>
@@ -130,6 +168,7 @@ class UserForm extends React.Component {
                     placeholder="Contact Number"
                     autoComplete="off"
                     value={contact_number}
+                    onChange={this.handleChange}
                   />
                   <FormFeedback></FormFeedback>
                 </FormGroup>
@@ -143,6 +182,7 @@ class UserForm extends React.Component {
                     placeholder="********"
                     autoComplete="off"
                     value={password}
+                    onChange={this.handleChange}
                   />
                   <FormFeedback></FormFeedback>
                 </FormGroup>
@@ -156,6 +196,7 @@ class UserForm extends React.Component {
                     placeholder="********"
                     autoComplete="off"
                     value={confirm_password}
+                    onChange={this.handleChange}
                   />
                   <FormFeedback></FormFeedback>
                 </FormGroup>
@@ -169,6 +210,7 @@ class UserForm extends React.Component {
                     value={ActiveOptions.find(
                       option => option.value === is_active
                     )}
+                    onChange={this.handleSelect}
                   />
                 </FormGroup>
               </Col>
@@ -181,6 +223,7 @@ class UserForm extends React.Component {
                     value={RoleOptions(roles).find(
                       option => option.value === role
                     )}
+                    onChange={this.handleSelect}
                   />
                 </FormGroup>
               </Col>
@@ -188,7 +231,7 @@ class UserForm extends React.Component {
             <FormGroup>
               <Col md={2} className="float-right">
                 <Button size="sm" type="submit" color="primary" block>
-                  Submit
+                  {isSubmitting ? "Please Wait..." : " Submit"}
                 </Button>
               </Col>
             </FormGroup>
