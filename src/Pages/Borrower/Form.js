@@ -12,6 +12,7 @@ import {
 import Select from "react-select";
 import { getRole } from "../../request/User";
 import _ from "lodash";
+// import { shape } from "../../Helper/Validation";
 
 const ActiveOptions = [
   { value: true, label: "Active" },
@@ -85,6 +86,10 @@ class UserForm extends React.Component {
     }
   };
 
+  schema(fieldname, fieldprintname, value, rules) {
+    console.log(fieldname + "/" + rules);
+  }
+
   render() {
     const { roles, isSubmitting } = this.state;
     const {
@@ -97,19 +102,6 @@ class UserForm extends React.Component {
       is_active,
       role
     } = this.state.userDetails;
-    // const onSubmit = async (values, { props, setSubmitting }) => {
-    //   try {
-    //     setSubmitting(true);
-    //     console.log(values);
-    //     const res = await props.submitHandler(values);
-    //     if (res.isValidationError) {
-    //       setSubmitting(false);
-    //     }
-    //     setSubmitting(false);
-    //   } catch (error) {
-    //     setSubmitting(false);
-    //   }
-    // };
 
     if (_.isEmpty(roles)) return <p>Loading...</p>;
     return (
@@ -127,6 +119,12 @@ class UserForm extends React.Component {
                     autoComplete="off"
                     value={firstname}
                     onChange={this.handleChange}
+                    onKeyPress={this.schema(
+                      "firstname",
+                      "First Name",
+                      firstname,
+                      "required|email"
+                    )}
                   />
                   <FormFeedback></FormFeedback>
                 </FormGroup>

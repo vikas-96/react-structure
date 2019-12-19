@@ -18,7 +18,7 @@ class Add extends Component {
       notify({
         time: 1000,
         message: "Borrower created successfully!",
-        path: "/user",
+        path: "/borrower",
         ...this.props
       });
     }
