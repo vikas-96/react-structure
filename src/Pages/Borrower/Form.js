@@ -13,6 +13,7 @@ import Select from "react-select";
 import { getRole } from "../../request/User";
 import _ from "lodash";
 // import { shape } from "../../Helper/Validation";
+import SimpleReactValidator from "simple-react-validator";
 
 const ActiveOptions = [
   { value: true, label: "Active" },
@@ -28,6 +29,11 @@ const RoleOptions = roles => {
 };
 
 class UserForm extends React.Component {
+  constructor(props) {
+    super(props);
+    this.validator = new SimpleReactValidator();
+  }
+
   state = {
     isSubmitting: false,
     roles: {},
@@ -76,6 +82,11 @@ class UserForm extends React.Component {
   handleSubmit = async e => {
     e.preventDefault();
     // console.log(this.props);
+    if (!this.validator.allValid()) {
+      this.validator.showMessages();
+      this.forceUpdate();
+      return false;
+    }
     try {
       this.isSubmitting(true);
       await this.props.submitHandler(this.state.userDetails);
@@ -86,11 +97,8 @@ class UserForm extends React.Component {
     }
   };
 
-  schema(fieldname, fieldprintname, value, rules) {
-    console.log(fieldname + "/" + rules);
-  }
-
   render() {
+    this.validator.purgeFields();
     const { roles, isSubmitting } = this.state;
     const {
       firstname,
@@ -119,14 +127,13 @@ class UserForm extends React.Component {
                     autoComplete="off"
                     value={firstname}
                     onChange={this.handleChange}
-                    onKeyPress={this.schema(
-                      "firstname",
-                      "First Name",
-                      firstname,
-                      "required|email"
-                    )}
+                    onBlur={() => this.validator.showMessageFor("firstname")}
                   />
-                  <FormFeedback></FormFeedback>
+                  {this.validator.message(
+                    "firstname",
+                    firstname,
+                    "required|alpha_space"
+                  )}
                 </FormGroup>
               </Col>
               <Col md={3}>
@@ -139,7 +146,13 @@ class UserForm extends React.Component {
                     autoComplete="off"
                     value={lastname}
                     onChange={this.handleChange}
+                    onBlur={() => this.validator.showMessageFor("lastname")}
                   />
+                  {this.validator.message(
+                    "lastname",
+                    lastname,
+                    "required|alpha_space"
+                  )}
                   <FormFeedback></FormFeedback>
                 </FormGroup>
               </Col>
@@ -153,7 +166,9 @@ class UserForm extends React.Component {
                     autoComplete="off"
                     value={email}
                     onChange={this.handleChange}
+                    onBlur={() => this.validator.showMessageFor("email")}
                   />
+                  {this.validator.message("email", email, "required|email")}
                   <FormFeedback></FormFeedback>
                 </FormGroup>
               </Col>
@@ -167,7 +182,15 @@ class UserForm extends React.Component {
                     autoComplete="off"
                     value={contact_number}
                     onChange={this.handleChange}
+                    onBlur={() =>
+                      this.validator.showMessageFor("contact_number")
+                    }
                   />
+                  {this.validator.message(
+                    "contact_number",
+                    contact_number,
+                    "required|numeric"
+                  )}
                   <FormFeedback></FormFeedback>
                 </FormGroup>
               </Col>
@@ -181,7 +204,9 @@ class UserForm extends React.Component {
                     autoComplete="off"
                     value={password}
                     onChange={this.handleChange}
+                    onBlur={() => this.validator.showMessageFor("password")}
                   />
+                  {this.validator.message("password", password, "required")}
                   <FormFeedback></FormFeedback>
                 </FormGroup>
               </Col>
@@ -209,7 +234,9 @@ class UserForm extends React.Component {
                       option => option.value === is_active
                     )}
                     onChange={this.handleSelect}
+                    onBlur={() => this.validator.showMessageFor("is_active")}
                   />
+                  {this.validator.message("is_active", is_active, "required")}
                 </FormGroup>
               </Col>
               <Col md={3}>
@@ -222,7 +249,9 @@ class UserForm extends React.Component {
                       option => option.value === role
                     )}
                     onChange={this.handleSelect}
+                    onBlur={() => this.validator.showMessageFor("role")}
                   />
+                  {this.validator.message("role", role, "required")}
                 </FormGroup>
               </Col>
             </Row>
