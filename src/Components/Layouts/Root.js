@@ -1,6 +1,6 @@
 import React from "react";
 import { Switch } from "react-router-dom";
-import { PublicLayout, PrivateLayout } from "./Layout";
+import { PublicLayout, PrivateLayout, FrontLayout } from "./Layout";
 import Login from "../../Pages/Auth/Login";
 import Dashboard from "../../Pages/Dashboard";
 import User from "../../Pages/User";
@@ -9,14 +9,18 @@ import EditUser from "../../Pages/User/Edit";
 
 import Borrower from "../../Pages/Borrower";
 import AddBorrower from "../../Pages/Borrower/Add";
+import EditBorrower from "../../Pages/Borrower/Edit";
 // import EditUser from "../../Pages/User/Edit";
 // const AddUser = lazy(() => import("../../Pages/User/Add"));
+
+import Contactus from "../../Pages/Contact/Contactus";
 
 const Root = () => {
   return (
     <React.Fragment>
       {/* <Suspense fallback={"Loading"}> */}
       <Switch>
+        <FrontLayout path="/contactus" exact component={Contactus} />
         <PublicLayout path="/" exact component={Login} />
         <PrivateLayout
           path="/dashboard"
@@ -57,7 +61,7 @@ const Root = () => {
         <PrivateLayout
           path="/borrower/edit/:id"
           exact
-          component={EditUser}
+          component={EditBorrower}
           authenticated={true}
         />
       </Switch>

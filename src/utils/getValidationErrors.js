@@ -17,7 +17,7 @@ export default function(props) {
     !_.isEmpty(errorData) &&
       notify({
         type: "error",
-        text: "Please Check the Error Fields."
+        text: _.replace(Object.values(errorData), ",", "<br />")
       });
 
     return errorData;

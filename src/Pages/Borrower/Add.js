@@ -1,44 +1,29 @@
 import React, { Component } from "react";
 import BorrowerForm from "./Form";
-import { createUserData } from "../../Store/User/Action";
-import { connect } from "react-redux";
+import { createUser } from "../../request/User";
+// import { connect } from "react-redux";
 import getValidationErrors from "../../utils/getValidationErrors";
 import notify from "../../utils/showNotifyWithRedirect";
 
 class Add extends Component {
   handleSubmit = async data => {
     try {
-      await this.props.dispatch(createUserData(data));
-    } catch (error) {}
-    return this.props;
-  };
-
-  render() {
-    if (this.props.isUserCreated) {
+      await createUser(data);
       notify({
         time: 1000,
         message: "Borrower created successfully!",
         path: "/borrower",
         ...this.props
       });
+    } catch (error) {
+      let errordata = { error: error, isValidationError: true };
+      getValidationErrors(errordata);
     }
-    return (
-      <BorrowerForm
-        isCreate={true}
-        validationErrors={getValidationErrors(this.props)}
-        isValidationError={this.props.isValidationError}
-        submitHandler={this.handleSubmit}
-      />
-    );
+  };
+
+  render() {
+    return <BorrowerForm isCreate={true} submitHandler={this.handleSubmit} />;
   }
 }
 
-function mapStateToProps(state) {
-  return {
-    isUserCreated: state.User.isUserCreated,
-    error: state.User.error,
-    isValidationError: state.User.isValidationError
-  };
-}
-
-export default connect(mapStateToProps)(Add);
+export default Add;

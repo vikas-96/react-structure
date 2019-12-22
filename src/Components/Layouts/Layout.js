@@ -1,7 +1,8 @@
 import React from "react";
 import { Route, Redirect } from "react-router-dom";
-import Header from "./Header";
-import Footer from "./Footer";
+import Header from "./UserDashboard/Header";
+import Footer from "./UserDashboard/Footer";
+import FrontHeader from "../Layouts/Front/Header";
 
 export const PublicLayout = ({ component: Component, ...rest }) => {
   return (
@@ -35,6 +36,20 @@ export const PrivateLayout = ({
           <Redirect to="/" />
         )
       }
+    />
+  );
+};
+
+export const FrontLayout = ({ component: Component, ...rest }) => {
+  return (
+    <Route
+      {...rest}
+      render={props => (
+        <div className="wrapper">
+          <FrontHeader />
+          <Component {...props} />
+        </div>
+      )}
     />
   );
 };

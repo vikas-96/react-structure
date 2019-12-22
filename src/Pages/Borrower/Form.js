@@ -1,18 +1,8 @@
 import React from "react";
-import {
-  Form,
-  Button,
-  FormGroup,
-  Input,
-  Label,
-  Row,
-  Col,
-  FormFeedback
-} from "reactstrap";
+import { Form, Button, FormGroup, Input, Label, Row, Col } from "reactstrap";
 import Select from "react-select";
 import { getRole } from "../../request/User";
 import _ from "lodash";
-// import { shape } from "../../Helper/Validation";
 import SimpleReactValidator from "simple-react-validator";
 
 const ActiveOptions = [
@@ -31,39 +21,87 @@ const RoleOptions = roles => {
 class UserForm extends React.Component {
   constructor(props) {
     super(props);
+    this.state = {
+      isSubmitting: false,
+      roles: {},
+      // errors: "",
+      confirm_password: "",
+      userDetails: {
+        firstname: "",
+        lastname: "",
+        email: "",
+        contact_number: "",
+        password: "",
+        is_active: "",
+        role: ""
+      }
+    };
     this.validator = new SimpleReactValidator();
   }
 
-  state = {
-    isSubmitting: false,
-    roles: {},
-    userDetails: {
-      firstname: "",
-      lastname: "",
-      email: "",
-      contact_number: "",
-      password: "",
-      confirm_password: "",
-      is_active: "",
-      role: ""
-    }
-  };
-
   componentDidMount() {
     this.fetchRole();
+    if (!_.isEmpty(this.props.userDetails)) {
+      this.setState({
+        userDetails: {
+          firstname: this.props.userDetails.firstname,
+          lastname: this.props.userDetails.lastname,
+          email: this.props.userDetails.email,
+          contact_number: this.props.userDetails.contact_number,
+          is_active: this.props.userDetails.is_active,
+          role: this.props.userDetails.role
+        }
+      });
+    }
+  }
+
+  static getDerivedStateFromProps(props, state) {
+    // if (!_.isEmpty(props.userDetails)) {
+    //   if (props.userDetails !== state.userDetails) {
+    //     return {
+    //       userDetails: {
+    //         firstname: props.userDetails.firstname,
+    //         lastname: props.userDetails.lastname,
+    //         email: props.userDetails.email,
+    //         contact_number: props.userDetails.contact_number,
+    //         is_active: props.userDetails.is_active,
+    //         role: props.userDetails.role
+    //       }
+    //     };
+    //   }
+    // }
+    // Return null to indicate no change to state.
+    return null;
   }
 
   fetchRole = async () => {
     await getRole().then(res => this.setState({ roles: res }));
   };
 
+  // handleServerError = e => {
+  //   if (this.validator.fieldValid("" + e.target.name + "")) {
+  //     const { errors } = this.state;
+  //     delete errors[e.target.name];
+  //     this.setState({
+  //       errors: errors
+  //     });
+  //   }
+  // };
+
   handleChange = e => {
+    if (!_.has(this.state.userDetails, `${e.target.name}`)) {
+      this.setState({
+        [e.target.name]: e.target.value
+      });
+      return true;
+    }
     this.setState({
       userDetails: {
         ...this.state.userDetails,
         [e.target.name]: e.target.value
       }
     });
+    // this.handleServerError(e);
   };
 
   handleSelect = (e, componentName) => {
@@ -98,23 +136,20 @@ class UserForm extends React.Component {
   };
 
   render() {
-    console.log(this.props);
     this.validator.purgeFields();
-    const { roles, isSubmitting } = this.state;
+    const { roles, isSubmitting, confirm_password } = this.state;
     const {
       firstname,
       lastname,
       email,
       contact_number,
       password,
-      confirm_password,
       is_active,
       role
     } = this.state.userDetails;
 
-    const error = this.props.validationErrors;
-
     if (_.isEmpty(roles)) return <p>Loading...</p>;
+
     return (
       <React.Fragment>
         <Form onSubmit={this.handleSubmit}>
@@ -130,10 +165,13 @@ class UserForm extends React.Component {
                     autoComplete="off"
                     value={firstname}
                     onChange={this.handleChange}
+                    onBlur={() => this.validator.showMessageFor("FirstName")}
                   />
-                  <div class="srv-validation-message">
-                    {error.firstname != "" ? error.firstname : ""}
-                  </div>
+                  {this.validator.message(
+                    "FirstName",
+                    firstname,
+                    "required|alpha_space"
+                  )}
                 </FormGroup>
               </Col>
               <Col md={3}>
@@ -146,10 +184,13 @@ class UserForm extends React.Component {
                     autoComplete="off"
                     value={lastname}
                     onChange={this.handleChange}
+                    onBlur={() => this.validator.showMessageFor("LastName")}
                   />
-                  <div class="srv-validation-message">
-                    {error.lastname != "" ? error.lastname : ""}
-                  </div>
+                  {this.validator.message(
+                    "LastName",
+                    lastname,
+                    "required|alpha_space"
+                  )}
                 </FormGroup>
               </Col>
               <Col md={3}>
@@ -162,10 +203,9 @@ class UserForm extends React.Component {
                     autoComplete="off"
                     value={email}
                     onChange={this.handleChange}
+                    onBlur={() => this.validator.showMessageFor("Email")}
                   />
-                  <div class="srv-validation-message">
-                    {error.email != "" ? error.email : ""}
-                  </div>
+                  {this.validator.message("Email", email, "required|email")}
                 </FormGroup>
               </Col>
               <Col md={3}>
@@ -178,44 +218,58 @@ class UserForm extends React.Component {
                     autoComplete="off"
                     value={contact_number}
                     onChange={this.handleChange}
+                    onBlur={() =>
+                      this.validator.showMessageFor("Contact Number")
+                    }
                   />
-                  <div class="srv-validation-message">
-                    {error.contact_number != "" ? error.contact_number : ""}
-                  </div>
+                  {this.validator.message(
+                    "Contact Number",
+                    contact_number,
+                    "required|numeric"
+                  )}
                 </FormGroup>
               </Col>
-              <Col md={3}>
-                <FormGroup>
-                  <Label for="password">Password</Label>
-                  <Input
-                    type="password"
-                    name="password"
-                    placeholder="********"
-                    autoComplete="off"
-                    value={password}
-                    onChange={this.handleChange}
-                  />
-                  <div class="srv-validation-message">
-                    {error.password != "" ? error.password : ""}
-                  </div>
-                </FormGroup>
-              </Col>
-              <Col md={3}>
-                <FormGroup>
-                  <Label for="confirm_password">Confirm Password</Label>
-                  <Input
-                    type="password"
-                    name="confirm_password"
-                    placeholder="********"
-                    autoComplete="off"
-                    value={confirm_password}
-                    onChange={this.handleChange}
-                  />
-                  <div class="srv-validation-message">
-                    {error.confirm_password != "" ? error.confirm_password : ""}
-                  </div>
-                </FormGroup>
-              </Col>
+              {this.props.isCreate && (
+                <div>
+                  <Col md={3}>
+                    <FormGroup>
+                      <Label for="password">Password</Label>
+                      <Input
+                        type="password"
+                        name="password"
+                        placeholder="********"
+                        autoComplete="off"
+                        value={password}
+                        onChange={this.handleChange}
+                        onBlur={() => this.validator.showMessageFor("Password")}
+                      />
+                      {this.validator.message("Password", password, "required")}
+                    </FormGroup>
+                  </Col>
+                  <Col md={3}>
+                    <FormGroup>
+                      <Label for="confirm_password">Confirm Password</Label>
+                      <Input
+                        type="password"
+                        name="confirm_password"
+                        placeholder="********"
+                        autoComplete="off"
+                        value={confirm_password}
+                        onChange={this.handleChange}
+                        onBlur={() =>
+                          this.validator.showMessageFor("Confirm Password")
+                        }
+                      />
+                      {this.validator.message(
+                        "Confirm Password",
+                        confirm_password,
+                        `required|in:${password}`,
+                        { messages: { in: "Passwords need to match !" } }
+                      )}
+                    </FormGroup>
+                  </Col>
+                </div>
+              )}
               <Col md={3}>
                 <FormGroup>
                   <Label for="is_active">Status</Label>
@@ -226,10 +280,9 @@ class UserForm extends React.Component {
                       option => option.value === is_active
                     )}
                     onChange={this.handleSelect}
+                    onBlur={() => this.validator.showMessageFor("Status")}
                   />
-                  <div class="srv-validation-message">
-                    {error.is_active != "" ? error.is_active : ""}
-                  </div>
+                  {this.validator.message("Status", is_active, "required")}
                 </FormGroup>
               </Col>
               <Col md={3}>
@@ -242,10 +295,9 @@ class UserForm extends React.Component {
                       option => option.value === role
                     )}
                     onChange={this.handleSelect}
+                    onBlur={() => this.validator.showMessageFor("Role")}
                   />
-                  <div class="srv-validation-message">
-                    {error.role != "" ? error.role : ""}
-                  </div>
+                  {this.validator.message("Role", role, "required")}
                 </FormGroup>
               </Col>
             </Row>

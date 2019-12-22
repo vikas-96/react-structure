@@ -12,7 +12,6 @@ import {
   DropdownItem
 } from "reactstrap";
 import { NavLink } from "react-router-dom";
-import logout from "../../Pages/Auth/Logout";
 
 const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -28,10 +27,10 @@ const Header = () => {
         <Collapse isOpen={isOpen} navbar>
           <Nav className="ml-auto" navbar>
             <NavItem>
-              <NavLink to="/dashboard">Dashboard</NavLink>
+              <NavLink to="#">Home</NavLink>
             </NavItem>
             <NavItem>
-              <NavLink to="/user">Users</NavLink>
+              <NavLink to="/contactus">Contact Us</NavLink>
             </NavItem>
             <UncontrolledDropdown nav inNavbar>
               <DropdownToggle nav caret>
@@ -45,9 +44,7 @@ const Header = () => {
               </DropdownMenu>
             </UncontrolledDropdown>
             <NavItem>
-              <NavLink onClick={logout} to="/">
-                Logout
-              </NavLink>
+              <NavLink to="#">About Us</NavLink>
             </NavItem>
           </Nav>
         </Collapse>
