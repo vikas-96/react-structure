@@ -14,6 +14,7 @@ import EditBorrower from "../../Pages/Borrower/Edit";
 // const AddUser = lazy(() => import("../../Pages/User/Add"));
 
 import Contactus from "../../Pages/Contact/Contactus";
+import Aboutus from "../../Pages/About/Aboutus";
 
 const Root = () => {
   return (
@@ -21,6 +22,7 @@ const Root = () => {
       {/* <Suspense fallback={"Loading"}> */}
       <Switch>
         <FrontLayout path="/contactus" exact component={Contactus} />
+        <FrontLayout path="/aboutus" exact component={Aboutus} />
         <PublicLayout path="/" exact component={Login} />
         <PrivateLayout
           path="/dashboard"

@@ -10,7 +10,7 @@ const initialState = {
   }
 };
 
-const Contact = (Component, props) => {
+const Contact = Component => {
   class Contacthoc extends React.Component {
     constructor(props) {
       super(props);
@@ -50,6 +50,7 @@ const Contact = (Component, props) => {
           setSubmitting={this.setSubmitting}
           resetForm={this.resetForm}
           {...this.state}
+          {...this.props}
         />
       );
     }

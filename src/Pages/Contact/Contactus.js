@@ -3,7 +3,7 @@ import ContactForm from "./Form";
 
 class Contactus extends React.Component {
   render() {
-    return <ContactForm />;
+    return <ContactForm pagename="contactus" />;
   }
 }
 

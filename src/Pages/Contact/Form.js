@@ -24,13 +24,11 @@ class Contactus extends React.Component {
     }
     try {
       this.props.setSubmitting(true);
-      console.log(this.props);
       //   await this.props.submitHandler(this.props.contactDetails);
       // this.validator.hideMessageFor("Name");
-      console.log("resetup");
-      console.log(this.addContactForm);
+      console.log(this.props.contactDetails);
       this.props.resetForm();
-      console.log("reset");
+      // this.validator.hideMessageFor("Name");
       this.validator.hideMessages();
       this.props.setSubmitting(false);
     } catch (error) {
@@ -49,6 +47,7 @@ class Contactus extends React.Component {
         <Form
           onSubmit={this.handleSubmit}
           innerRef={form => (this.addContactForm = form)}
+          className={this.props.pagename}
         >
           <div className="container-fluid">
             <Row>
