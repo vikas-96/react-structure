@@ -17,8 +17,7 @@ const Contact = (Component, props) => {
       this.state = initialState;
     }
 
-    resetFrom = () => {
-      console.log("reset");
+    resetForm = () => {
       this.setState(initialState);
     };
 
@@ -49,7 +48,7 @@ const Contact = (Component, props) => {
           handleChange={this.handleChange}
           handleSelect={this.handleSelect}
           setSubmitting={this.setSubmitting}
-          resetFrom={this.resetFrom}
+          resetForm={this.resetForm}
           {...this.state}
         />
       );

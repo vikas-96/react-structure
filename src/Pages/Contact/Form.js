@@ -26,8 +26,12 @@ class Contactus extends React.Component {
       this.props.setSubmitting(true);
       console.log(this.props);
       //   await this.props.submitHandler(this.props.contactDetails);
-      this.validator.hideMessageFor("Name");
-      this.props.resetFrom();
+      // this.validator.hideMessageFor("Name");
+      console.log("resetup");
+      console.log(this.addContactForm);
+      this.props.resetForm();
+      console.log("reset");
+      this.validator.hideMessages();
       this.props.setSubmitting(false);
     } catch (error) {
       this.props.setSubmitting(false);
@@ -37,12 +41,15 @@ class Contactus extends React.Component {
 
   render() {
     this.validator.purgeFields();
-    console.log(this.props);
+    // console.log(this.props);
     const { name, email, country, phone } = this.props.contactDetails;
 
     return (
       <React.Fragment>
-        <Form onSubmit={this.handleSubmit}>
+        <Form
+          onSubmit={this.handleSubmit}
+          innerRef={form => (this.addContactForm = form)}
+        >
           <div className="container-fluid">
             <Row>
               <Col md={3}>
